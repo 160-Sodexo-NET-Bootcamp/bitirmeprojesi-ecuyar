@@ -12,17 +12,18 @@ namespace MLS_Api.Controllers.User
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegisterUserController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
-        public RegisterUserController(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
+        //Register user
         [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto userDto)
         {
@@ -43,6 +44,38 @@ namespace MLS_Api.Controllers.User
                 unitOfWork.Complete();
 
                 if (result != true)
+                {
+                    return BadRequest();
+                }
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+                //logger
+                return BadRequest();
+            }
+        }
+
+        //User login check
+        [HttpPost]
+        [Route("LogIn")]
+        public IActionResult CheckUserCredentials([FromBody] LogInUserDto user)
+        {
+            try
+            {
+                //find the corresponding user
+                var existsUser = unitOfWork.Users.Where(x => x.Username == user.Username || x.Email == user.Email);
+
+                if (existsUser == null)
+                {
+                    return BadRequest();
+                }
+
+                var localHashedPassword = HashUserPassword.DoHash(existsUser[0].UserId.ToString(), user.Password, existsUser[0].Token.ToString());
+
+                //check hashed passwords are matched
+                if (localHashedPassword != existsUser[0].Password)
                 {
                     return BadRequest();
                 }
