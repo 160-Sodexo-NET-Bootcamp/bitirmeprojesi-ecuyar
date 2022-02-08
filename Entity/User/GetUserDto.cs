@@ -1,19 +1,15 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
-namespace MLS_Data.DataModels
+namespace Entity.User
 {
-    public class User_DataModel
+    public class GetUserDto
     {
-        [Key]
         public Guid UserId { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public Guid Token { get; set; }
         public short TryCount { get; set; }
     }
 }

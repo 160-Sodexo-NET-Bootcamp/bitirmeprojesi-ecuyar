@@ -1,3 +1,5 @@
+using AutoMapper;
+using Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MLS_Data.Context;
+using MLS_Data.UoW;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +34,16 @@ namespace MLS_Api
             //connection to database
             var connectionString = Configuration.GetConnectionString("MyLittleShopDatabaseString");
             services.AddDbContext<MyLittleShopDbContext>(options => options.UseSqlServer(connectionString));
+
+            //automapper
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
+            services.AddSingleton(mapperConfig.CreateMapper());
+
+            //unitofwork
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             services.AddControllers();
