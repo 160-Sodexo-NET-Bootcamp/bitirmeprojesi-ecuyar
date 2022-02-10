@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 
 namespace Entity.User
 {
@@ -21,5 +22,17 @@ namespace Entity.User
         public string Email { get; set; }
         public string Password { get; set; }
         public Guid Token { get => _Token; }
+    }
+
+    public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
+    {
+        public RegisterUserDtoValidator()
+        {
+            RuleFor(x => x.Username).NotEmpty();
+            RuleFor(x => x.FirstName).NotEmpty();
+            RuleFor(x => x.LastName).NotEmpty();
+            RuleFor(x => x.Email).EmailAddress();
+            RuleFor(x => x.Password).Length(8, 20);
+        }
     }
 }

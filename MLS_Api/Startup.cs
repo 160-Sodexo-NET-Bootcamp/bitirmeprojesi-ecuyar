@@ -1,5 +1,8 @@
 using AutoMapper;
 using Core;
+using Entity.User;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -47,6 +50,15 @@ namespace MLS_Api
 
 
             services.AddControllers();
+
+            //fluentvalidator
+            services.AddMvc().AddFluentValidation();
+
+            //validations
+            services.AddTransient<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+            services.AddTransient<IValidator<LogInUserDto>, LogInUserDtoValidator>();
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MLS_Api", Version = "v1" });
