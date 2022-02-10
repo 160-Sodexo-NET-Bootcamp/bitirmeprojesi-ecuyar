@@ -21,6 +21,9 @@ namespace Core
             //product mapping
             CreateMap<Product_DataModel, RegisterProductDto>();
             CreateMap<RegisterProductDto, Product_DataModel>();
+
+            CreateMap<Product_DataModel, ShowProductDto>();
+            CreateMap<ShowProductDto, Product_DataModel>();
         }
     }
 }

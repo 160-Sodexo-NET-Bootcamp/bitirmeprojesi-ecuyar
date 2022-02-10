@@ -1,16 +1,20 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MLS_Data.DataModels
+namespace Entity.Product
 {
-    public class Product_DataModel
+    public class ShowProductDto
     {
-        [Key]
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
         public short BrandId { get; set; }
         public short ColorId { get; set; }
+        public string BrandName { get; set; }
+        public string ColorName { get; set; }
         public int CategoryId { get; set; }
         public Guid SellerId { get; set; }
         public bool IsOfferable { get; set; }

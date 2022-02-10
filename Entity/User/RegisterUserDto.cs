@@ -28,9 +28,9 @@ namespace Entity.User
     {
         public RegisterUserDtoValidator()
         {
-            RuleFor(x => x.Username).NotEmpty();
-            RuleFor(x => x.FirstName).NotEmpty();
-            RuleFor(x => x.LastName).NotEmpty();
+            RuleFor(x => x.Username).NotNull();
+            RuleFor(x => x.FirstName).NotNull();
+            RuleFor(x => x.LastName).NotNull();
             RuleFor(x => x.Email).EmailAddress();
             RuleFor(x => x.Password).Length(8, 20);
         }

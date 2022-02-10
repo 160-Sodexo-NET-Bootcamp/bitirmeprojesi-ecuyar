@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity.Category;
+using Entity.Product;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MLS_Data.DataModels;
@@ -33,14 +34,14 @@ namespace MLS_Api.Controllers.Category
             return Ok(categoryDtos);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryProducts(int categoryId)
+        [HttpGet("products")]
+        public IActionResult GetCategoryProducts([FromQuery] int categoryId)
         {
-            //user will get chosen category's products
-            var products = await unitOfWork.Categories.GetById(categoryId);
-            var categoryDto = mapper.Map<CategoryDto>(category);
+            //user will get chosen category's unsold products
+            var products = unitOfWork.Products.Where(x => x.CategoryId == categoryId && x.IsSold == false);
+            var productsDto = mapper.Map<List<Product_DataModel>, List<ShowProductDto>>(products);
 
-            return Ok(categoryDto);
+            return Ok(productsDto);
         }
     }
 }

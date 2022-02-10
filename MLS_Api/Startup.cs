@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core;
+using Entity.Product;
 using Entity.User;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -55,8 +56,11 @@ namespace MLS_Api
             services.AddMvc().AddFluentValidation();
 
             //validations
+            //user
             services.AddTransient<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
             services.AddTransient<IValidator<LogInUserDto>, LogInUserDtoValidator>();
+            //product
+            services.AddTransient<IValidator<RegisterProductDto>, RegisterProductDtoValidator>();
 
 
             services.AddSwaggerGen(c =>
