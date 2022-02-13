@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MLS_Data.Context;
+using MLS_Data.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,125 +9,180 @@ using System.Threading.Tasks;
 
 namespace MLS_Data.Repositories.GeneralRepository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<Key, MainDto, ApplicationUser> : IGenericRepository<Key, MainDto, ApplicationUser> where MainDto : class
     {
         protected MyLittleShopDbContext context;
-        internal DbSet<T> dbSet;
+        internal DbSet<MainDto> dbSet;
 
         public GenericRepository(MyLittleShopDbContext context)
         {
             this.context = context;
-            dbSet = context.Set<T>();
+            dbSet = context.Set<MainDto>();
         }
 
-        public virtual async Task<bool> Add(T entity)
+        public virtual async Task<ApplicationResult> Add(MainDto entity, ApplicationUser applicationUser)
         {
             try
             {
                 await dbSet.AddAsync(entity);
-                return true;
+
+                return new ApplicationResult
+                {
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
             }
             catch (Exception)
             {
                 //logger
-                return false;
+                return new ApplicationResult
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = "Error Occured!"
+                };
             }
         }
 
-        public bool DeleteByGuid(T entity)
+        public virtual ApplicationResult DeleteById(MainDto entity, ApplicationUser applicationUser)
         {
             try
             {
                 if (entity == null)
                 {
-                    return false;
+                    return new ApplicationResult
+                    {
+                        Succeeded = false,
+                        ResponseTime = DateTime.UtcNow,
+                        ErrorMessage = "Error Occured!"
+                    };
                 }
 
+                //dont delete use isdeleted property
                 dbSet.Update(entity);
-                return true;
+
+                return new ApplicationResult
+                {
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
             }
             catch (Exception)
             {
                 //logger
-                return false;
+                return new ApplicationResult
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = "Error Occured!"
+                };
             }
         }
 
-        public bool DeleteById(T entity)
+        public virtual async Task<ApplicationResult<IEnumerable<MainDto>>> GetAll(ApplicationUser applicationUser)
+        {
+
+            var allitems = await dbSet.ToListAsync();
+
+            return new ApplicationResult<IEnumerable<MainDto>>
+            {
+                Result = allitems,
+                Succeeded = true,
+                ResponseTime = DateTime.UtcNow
+            };
+        }
+
+        public virtual async Task<ApplicationResult<MainDto>> GetById(Key id, ApplicationUser applicationUser)
+        {
+            var item = await dbSet.FindAsync(id);
+
+            return new ApplicationResult<MainDto>
+            {
+                Result = item,
+                Succeeded = true,
+                ResponseTime = DateTime.UtcNow
+            };
+        }
+
+        public virtual ApplicationResult Update(MainDto entity, ApplicationUser applicationUser)
         {
             try
             {
                 if (entity == null)
                 {
-                    return false;
+                    return new ApplicationResult
+                    {
+                        Succeeded = false,
+                        ResponseTime = DateTime.UtcNow,
+                        ErrorMessage = "Error Occured!"
+                    };
                 }
 
                 dbSet.Update(entity);
-                return true;
-            }
-            catch (Exception)
-            {
-                //logger
-                return false;
-            }
-        }
 
-        public virtual async Task<IEnumerable<T>> GetAll()
-        {
-            return await dbSet.ToListAsync();
-        }
-
-        public virtual async Task<T> GetByGuid(Guid guid)
-        {
-            return await dbSet.FindAsync(guid);
-        }
-
-        public virtual async Task<T> GetById(int id)
-        {
-            return await dbSet.FindAsync(id);
-        }
-
-        public bool Update(T entity)
-        {
-            try
-            {
-                if (entity == null)
+                return new ApplicationResult
                 {
-                    return false;
-                }
-
-                dbSet.Update(entity);
-                return true;
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
             }
             catch (Exception)
             {
                 //logger
-                return false;
+                return new ApplicationResult
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = "Error Occured!"
+                };
             }
         }
 
-        public bool UpdateGroup(List<T> entities)
+        public virtual ApplicationResult UpdateGroup(List<MainDto> entities, ApplicationUser applicationUser)
         {
             try
             {
                 if (entities == null)
                 {
-                    return false;
+                    return new ApplicationResult
+                    {
+                        Succeeded = false,
+                        ResponseTime = DateTime.UtcNow,
+                        ErrorMessage = "Error Occured!"
+                    };
                 }
 
                 dbSet.UpdateRange(entities);
-                return true;
+
+                return new ApplicationResult
+                {
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = "Error Occured!"
+                };
             }
             catch (Exception)
             {
                 //logger
-                return false;
+                return new ApplicationResult
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = "Error Occured!"
+                };
             }
         }
 
-        public List<T> Where(Expression<Func<T, bool>> predicate)
+        public ApplicationResult<List<MainDto>> Where(Expression<Func<MainDto, bool>> predicate, ApplicationUser applicationUser)
         {
-            return dbSet.Where(predicate).ToList();
+            List<MainDto> items = dbSet.Where(predicate).ToList();
+
+            return new ApplicationResult<List<MainDto>>
+            {
+                Result = items,
+                Succeeded = true,
+                ResponseTime = DateTime.UtcNow
+            };
         }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace Entity.Shared
 {
-    public class BaseEntity : CommonEntity
+    public class BaseEntityDto<T> : CommonEntityDto
     {
-        public int Id { get; set; }
+        public T Id { get; set; }
         public bool IsDeleted { get; set; }
     }
 
-    public class CommonEntity
+    public class CommonEntityDto
     {
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime? ModifiedDate { get; set; }
