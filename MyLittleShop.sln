@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLS_Api", "MLS_Api\MLS_Api.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLS_Data", "MLS_Data\MLS_Data.csproj", "{A495186C-A118-4D18-8B03-08930066B483}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{ED6D0266-1A7D-4FD7-BBE2-F885EEC3A738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "Entity\Entity.csproj", "{ED6D0266-1A7D-4FD7-BBE2-F885EEC3A738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{5E7DB868-E6EC-401E-A213-02EEAF6D9395}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{5E7DB868-E6EC-401E-A213-02EEAF6D9395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

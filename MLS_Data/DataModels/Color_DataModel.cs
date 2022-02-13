@@ -1,8 +1,9 @@
-﻿namespace MLS_Data.DataModels
+﻿using Entity.Shared;
+
+namespace MLS_Data.DataModels
 {
-    public class Color_DataModel
+    public class Color_DataModel : BaseEntity
     {
-        public short ColorId { get; set; }
         public string ColorName { get; set; }
     }
 }

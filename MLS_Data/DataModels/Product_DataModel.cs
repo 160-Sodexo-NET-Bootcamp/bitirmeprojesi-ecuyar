@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Entity.Shared;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MLS_Data.DataModels
 {
-    public class Product_DataModel
+    public class Product_DataModel : BaseEntity
     {
-        [Key]
-        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
         public short BrandId { get; set; }
