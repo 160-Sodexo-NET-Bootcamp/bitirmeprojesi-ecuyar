@@ -10,6 +10,7 @@ using MLS_Data.DataModels;
 using MLS_Data.Shared;
 using MLS_Data.UoW;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace MLS_Api.Controllers.Sale
@@ -36,7 +37,7 @@ namespace MLS_Api.Controllers.Sale
         /// <returns></returns>
         [HttpGet("buy")]
         [Authorize]
-        public async Task<ApplicationResult<bool>> CreateSale([FromQuery] int productId)
+        public async Task<ApplicationResult<bool>> CreateSale([FromQuery][Required] int productId)
         {
             try
             {
@@ -109,9 +110,9 @@ namespace MLS_Api.Controllers.Sale
         /// </summary>
         /// <param name="saleId"></param>
         /// <returns></returns>
-        [HttpGet("buy")]
+        [HttpGet("get")]
         [Authorize]
-        public async Task<ApplicationResult<GetSaleDto>> GetSale([FromQuery] int saleId)
+        public async Task<ApplicationResult<GetSaleDto>> GetSale([FromQuery][Required] int saleId)
         {
             try
             {
@@ -170,9 +171,9 @@ namespace MLS_Api.Controllers.Sale
         /// </summary>
         /// <param name="saleId"></param>
         /// <returns></returns>
-        [HttpGet("buy")]
+        [HttpGet("cancel")]
         [Authorize]
-        public async Task<ApplicationResult<bool>> CancelSale([FromQuery] int saleId)
+        public async Task<ApplicationResult<bool>> CancelSale([FromQuery][Required] int saleId)
         {
             try
             {
