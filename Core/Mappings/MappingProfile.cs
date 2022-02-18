@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Entity.Brand;
 using Entity.Category;
+using Entity.Color;
 using Entity.Identity;
 using Entity.Offer;
 using Entity.Product;
+using Entity.Sale;
 using Entity.User;
 using MLS_Data.DataModels;
 
@@ -22,7 +25,6 @@ namespace Core
             CreateMap<RegisterUserDto, ApplicationUser_DataModel>();
 
             CreateMap<ApplicationUser_DataModel, GetUserDto>();
-
 
             //category mapping
             CreateMap<Category_DataModel, CreateCategoryDto>();
@@ -49,6 +51,18 @@ namespace Core
 
             CreateMap<ShowOfferDto, Offer_DataModel>();
             CreateMap<Offer_DataModel, ShowOfferDto>();
+
+            //color mapping
+            CreateMap<GetColorDto, Color_DataModel>();
+            CreateMap<Color_DataModel, GetColorDto>();
+
+            //brand
+            CreateMap<GetBrandDto, Brand_DataModel>();
+            CreateMap<Brand_DataModel, GetBrandDto>();
+
+            //sale
+            CreateMap<GetSaleDto, Sales_DataModel>();
+            CreateMap<Sales_DataModel, GetSaleDto>();
         }
     }
 }

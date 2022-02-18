@@ -6,6 +6,7 @@ using Entity.Product;
 using Entity.User;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -76,6 +77,10 @@ namespace MLS_Api
             {
                 opt.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV2;
             });
+
+            //hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration["ConnectionStrings:MLS_Hangfire"]));
+            services.AddHangfireServer();
 
             //jwt
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]));
@@ -164,8 +169,6 @@ namespace MLS_Api
             //fluentvalidator
             services.AddMvc().AddFluentValidation();
 
-            services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false);
-
             //validations
             //user
             services.AddTransient<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
@@ -200,6 +203,8 @@ namespace MLS_Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
             {

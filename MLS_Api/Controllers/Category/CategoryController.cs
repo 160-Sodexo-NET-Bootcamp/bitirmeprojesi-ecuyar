@@ -199,21 +199,6 @@ namespace MLS_Api.Controllers.Category
             }
         }
 
-
-
-
-
-
-        //[HttpGet("products")]
-        //public IActionResult GetCategoryProducts([FromQuery] int categoryId)
-        //{
-        //    //user will get chosen category's unsold products
-        //    var products = unitOfWork.Products.Where(x => x.CategoryId == categoryId && x.IsSold == false);
-        //    var productsDto = mapper.Map<List<Product_DataModel>, List<ShowProductDto>>(products);
-
-        //    return Ok(productsDto);
-        //}
-
         private async Task<ApplicationUser_DataModel> GetCurrentUserAsync()
         {
             return await userManager.GetUserAsync(HttpContext.User);

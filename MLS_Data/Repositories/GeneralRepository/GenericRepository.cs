@@ -1,7 +1,6 @@
 ﻿using Entity.Shared;
 using Microsoft.EntityFrameworkCore;
 using MLS_Data.Context;
-using MLS_Data.DataModels;
 using MLS_Data.Shared;
 using System;
 using System.Collections.Generic;

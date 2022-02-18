@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using EmailService;
+using BackgroundWorker.Jobs;
+using Core.EmailService;
 using Entity.Shared;
 using Entity.User;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +23,6 @@ namespace MLS_Api.Controllers.User
     [ApiController]
     public class UserController : ControllerBase
     {
-        //private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         public UserManager<ApplicationUser_DataModel> userManager;
@@ -34,16 +34,6 @@ namespace MLS_Api.Controllers.User
             this.signInManager = signInManager;
             this.mapper = mapper;
             this.configuration = configuration;
-
-            var dynamicData = new Dictionary<string, string>
-            {
-                {"firstname", "Ennes Can"},
-                {"lastname", "UYYAR" },
-                {"Weblink", "www.google.com" }
-            };
-
-            //EmailSender emailSender = new("uyar.enescan@gmail.com", dynamicData);
-            //var res = emailSender.Main();
         }
 
         /// <summary>
@@ -76,26 +66,26 @@ namespace MLS_Api.Controllers.User
                 }
 
                 // TODO: Add mail confirmation
-
-                var code = userManager.GenerateEmailConfirmationTokenAsync(applicationUser_model);
-
-                var link = Url.Action("confirm", "User", new { userId = applicationUser_model.Id, token = code.Result });
+                //email confirmation api is absent but due to Url.Action can not create link, I don't make confirmation
+                //var code = userManager.GenerateEmailConfirmationTokenAsync(applicationUser_model);
+                //var link = Url.Action("confirm", "User", new { userId = applicationUser_model.Id, token = code.Result });
 
                 var dynamicData = new Dictionary<string, string>
                 {
                     {"firstname", applicationUser_model.FirstName },
-                    {"lastname", applicationUser_model.LastName },
-                    {"Weblink", link}
+                    {"lastname", applicationUser_model.LastName }
                 };
 
-                EmailSender emailSender = new(applicationUser_model.Email, dynamicData);
-                var res = emailSender.Main();
+                //create email message class
+                WelcomeEmailSender emailSender = new(applicationUser_model.Email, dynamicData);
 
-                await signInManager.SignInAsync(applicationUser_model, false);
+                //use background job
+                SendWelcomeEmail job = new();
+                //send email by triggering job
+                Hangfire.BackgroundJob.Enqueue(() => job.WelcomeEmailSendJob(emailSender));
+
                 var user = await userManager.FindByIdAsync(applicationUser_model.Id);
                 var userDto = mapper.Map<GetUserDto>(user);
-
-
 
                 return new ApplicationResult<GetUserDto>
                 {
@@ -139,7 +129,7 @@ namespace MLS_Api.Controllers.User
                 //user is not exists
                 if (dataModel == null)
                 {
-                    return BadRequest("Email or password is wrong.");
+                    return BadRequest(ErrorCodes.WrongCredentials);
                 }
 
                 //try to log in
@@ -150,7 +140,7 @@ namespace MLS_Api.Controllers.User
                 {
                     var localTime = Convert.ToDateTime(dataModel.LockoutEnd.ToString()).ToLocalTime();
 
-                    return BadRequest($"User blocked. Please wait until {localTime}.");
+                    return BadRequest($"{ErrorCodes.UserBlocked} Please wait until {localTime}.");
                 }
 
                 //if wrong password, increase failed attempt count
@@ -158,12 +148,8 @@ namespace MLS_Api.Controllers.User
                 {
                     await userManager.AccessFailedAsync(dataModel);
 
-                    return BadRequest("Email or password is wrong.");
+                    return BadRequest(ErrorCodes.WrongCredentials);
                 }
-
-
-                //EmailSender emailSender = new("Welcome", dataModel.Email, "Welcome to the shop!", "", $"{dataModel.FirstName} {dataModel.MiddleName} {dataModel.LastName}");
-                //emailSender.Main();
 
                 //log in is successfull
                 return Ok(CreateTokenResponse(dataModel));
@@ -171,10 +157,16 @@ namespace MLS_Api.Controllers.User
             catch (Exception)
             {
                 //logger
-                return BadRequest();
+                return BadRequest(ErrorCodes.GeneralError);
             }
         }
 
+        /// <summary>
+        /// Confirm user's email. [Not in use now.]
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("confirm")]
         public async Task<IActionResult> ConfirmEmail([FromQuery][Required] string userId, [Required] string token)
@@ -200,7 +192,6 @@ namespace MLS_Api.Controllers.User
                 return BadRequest("Error on confirmation.");
             }
         }
-
 
         private string GetToken(ApplicationUser_DataModel user)
         {

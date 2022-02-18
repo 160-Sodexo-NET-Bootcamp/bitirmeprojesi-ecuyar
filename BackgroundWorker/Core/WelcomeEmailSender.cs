@@ -2,12 +2,12 @@
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
 
-namespace Core.EmailService
+namespace BackgroundWorker.Core
 {
     public class WelcomeEmailSender
     {
-        public string To { get; set; }
-        public object DynamicData { get; set; }
+        private string To { get; set; }
+        private object DynamicData { get; set; }
 
         public WelcomeEmailSender(string To, object DynamicData)
         {

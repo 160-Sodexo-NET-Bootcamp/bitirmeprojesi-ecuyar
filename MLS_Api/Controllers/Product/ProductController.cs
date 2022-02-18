@@ -2,7 +2,6 @@
 using Entity.Product;
 using Entity.Shared;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MLS_Data.DataModels;
@@ -158,7 +157,7 @@ namespace MLS_Api.Controllers.Product
         {
             try
             {
-                //get current useer
+                //get current user
                 var userDataModel = GetCurrentUserAsync();
 
                 if (userDataModel.Result == null)
