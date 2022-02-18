@@ -1,41 +1,16 @@
 {
   "Version": 1,
   "ProjectMap": {
-    "7a21db74-9660-4bdd-8f49-c591ee3f4f75": {
-      "ProjectGuid": "7a21db74-9660-4bdd-8f49-c591ee3f4f75",
-      "DisplayName": "MLS_Api",
-      "ColorIndex": 0
-    },
-    "a495186c-a118-4d18-8b03-08930066b483": {
-      "ProjectGuid": "a495186c-a118-4d18-8b03-08930066b483",
-      "DisplayName": "MLS_Data",
-      "ColorIndex": 1
-    },
-    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
-      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
-      "DisplayName": "Miscellaneous Files",
-      "ColorIndex": -1
-    },
-    "ed6d0266-1a7d-4fd7-bbe2-f885eec3a738": {
-      "ProjectGuid": "ed6d0266-1a7d-4fd7-bbe2-f885eec3a738",
-      "DisplayName": "Entity",
-      "ColorIndex": 2
-    },
     "5e7db868-e6ec-401e-a213-02eeaf6d9395": {
       "ProjectGuid": "5e7db868-e6ec-401e-a213-02eeaf6d9395",
       "DisplayName": "Core",
-      "ColorIndex": 3
+      "ColorIndex": 0
     },
-    "df2aaf9b-2f78-4a24-be4d-0b2a6d53a6f5": {
-      "ProjectGuid": "df2aaf9b-2f78-4a24-be4d-0b2a6d53a6f5",
-      "DisplayName": "EmailService",
-      "ColorIndex": 4
-    },
-    "61e86567-b744-4d0c-9677-8940279f1731": {
-      "ProjectGuid": "61e86567-b744-4d0c-9677-8940279f1731",
-      "DisplayName": "BackgroundWorker",
-      "ColorIndex": 5
+    "7a21db74-9660-4bdd-8f49-c591ee3f4f75": {
+      "ProjectGuid": "7a21db74-9660-4bdd-8f49-c591ee3f4f75",
+      "DisplayName": "MLS_Api",
+      "ColorIndex": 1
     }
   },
-  "NextColorIndex": 6
+  "NextColorIndex": 2
 }
