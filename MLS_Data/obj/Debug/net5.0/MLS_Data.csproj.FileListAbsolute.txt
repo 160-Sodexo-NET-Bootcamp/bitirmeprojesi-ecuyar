@@ -1,0 +1,15 @@
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\bin\Debug\net5.0\MLS_Data.deps.json
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\bin\Debug\net5.0\MLS_Data.dll
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\bin\Debug\net5.0\ref\MLS_Data.dll
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\bin\Debug\net5.0\MLS_Data.pdb
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\bin\Debug\net5.0\Entity.dll
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\bin\Debug\net5.0\Entity.pdb
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.csproj.AssemblyReference.cache
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.AssemblyInfoInputs.cache
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.AssemblyInfo.cs
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.csproj.CoreCompileInputs.cache
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.csproj.CopyComplete
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.dll
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\ref\MLS_Data.dll
+C:\Users\ECU\source\repos\MyLittleShop\MLS_Data\obj\Debug\net5.0\MLS_Data.pdb

@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MLS_Api</name>
+    </assembly>
+    <members>
+        <member name="M:MLS_Api.Controllers.Brand.BrandController.GetAllColors">
+            <summary>
+            Get all brands. There should be role-based authorization.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Brand.BrandController.AddBrand(Entity.Brand.GetBrandDto)">
+            <summary>
+            Add a brand. There should be role-based authorization.
+            </summary>
+            <param name="getBrandDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Brand.BrandController.UpdateCategory(Entity.Brand.GetBrandDto)">
+            <summary>
+            Update a brand. There should be role-based authorization.
+            </summary>
+            <param name="getBrandDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Brand.BrandController.UpdateBrand(System.Int32)">
+            <summary>
+            Delete a brand by updating isdeleted = true. There should be role-based authorization.
+            </summary>
+            <param name="brandId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Category.CategoryController.GetAllCategories">
+            <summary>
+            Get all subcategories. No auth.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Category.CategoryController.AddCategory(Entity.Category.CreateCategoryDto)">
+            <summary>
+            Add a category. With auth.
+            </summary>
+            <param name="categoryDto"></param>
+            <returns>categoryDto</returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Category.CategoryController.UpdateCategory(Entity.Category.UpdateCategoryDto)">
+            <summary>
+            Update a category. With auth.
+            </summary>
+            <param name="categoryDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Category.CategoryController.ShowCategory(System.Int32)">
+            <summary>
+            Get a category with its products. No auth.
+            </summary>
+            <param name="categoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Color.ColorController.GetAllColors">
+            <summary>
+            Get all colors. There should be role-based authorization.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Color.ColorController.AddBrand(Entity.Color.GetColorDto)">
+            <summary>
+            Add a color. There should be role-based authorization.
+            </summary>
+            <param name="getColorDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Color.ColorController.UpdateCategory(Entity.Color.GetColorDto)">
+            <summary>
+            Update a color. There should be role-based authorization.
+            </summary>
+            <param name="getColorDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Color.ColorController.UpdateBrand(System.Int32)">
+            <summary>
+            Delete a color by updating isdeleted = true. There should be role-based authorization.
+            </summary>
+            <param name="colorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Offer.OfferController.CreateOffer(Entity.Offer.MakeOfferDto)">
+            <summary>
+            Create an offer for a product. With auth.
+            </summary>
+            <param name="makeOfferDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Offer.OfferController.UpdateOffer(Entity.Offer.UpdateOfferDto)">
+            <summary>
+            Update an offer's price or active status. With auth.
+            </summary>
+            <param name="updateOfferDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Offer.OfferController.GetOffersFromUser">
+            <summary>
+            Get user's offers that he made. With auth.
+            </summary>
+            <param></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Offer.OfferController.GetOffersToUser">
+            <summary>
+            Get user's offers that are made to him. With auth.
+            </summary>
+            <param></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Product.ProductController.AddProduct(Entity.Product.RegisterProductDto)">
+            <summary>
+            Add a product. With auth.
+            </summary>
+            <param name="productDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Product.ProductController.GetAll">
+            <summary>
+            Get all unsold products. For general page. No auth.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Product.ProductController.GetProductById(System.Int32)">
+            <summary>
+            Get the specified product that is not sold or deleted. For general page. No auth.
+            </summary>
+            <param name="productId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Product.ProductController.GetOwnedProducts(System.String)">
+            <summary>
+            Get user's all products that not deleted. This is for my account page. User get him/her products. With auth.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Product.ProductController.GetCompanyProducts(System.String)">
+            <summary>
+            Get user's all products that not deleted or unsold. This is for general page. No auth.
+            </summary>
+            <param name="companyId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Sale.SaleController.CreateSale(System.Int32)">
+            <summary>
+            Buy a product with product id. With auth.
+            </summary>
+            <param name="productId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Sale.SaleController.GetSale(System.Int32)">
+            <summary>
+            Get a sale. With auth.
+            </summary>
+            <param name="saleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.Sale.SaleController.CancelSale(System.Int32)">
+            <summary>
+            Cancel a sale request. With auth.
+            </summary>
+            <param name="saleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.User.UserController.Register(Entity.User.RegisterUserDto)">
+            <summary>
+            User Sign Up
+            </summary>
+            <param name="registerUserDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.User.UserController.LogIn(Entity.User.LogInUserDto)">
+            <summary>
+            User Log In
+            </summary>
+            /// <remarks>
+            You can use 
+            {
+            "email": "uyar.enescan@gmail.com",
+            "password": "enescanuyar"
+            }
+            </remarks>
+            <param name="logInUserDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MLS_Api.Controllers.User.UserController.ConfirmEmail(System.String,System.String)">
+            <summary>
+            Confirm user's email. [Not in use now.]
+            </summary>
+            <param name="userId"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

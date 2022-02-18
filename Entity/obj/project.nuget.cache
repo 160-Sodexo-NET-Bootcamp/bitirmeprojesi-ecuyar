@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "IwvCGUNUfZasjslqPgv1AKMe0VQfBc/HShQiWCSL4NEe6vGjEG/1kAi7XRjbUYhb2xAbTDwseqk3MEfsOdb/QQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ECU\\source\\repos\\MyLittleShop\\Entity\\Entity.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ECU\\.nuget\\packages\\fluentvalidation\\10.3.6\\fluentvalidation.10.3.6.nupkg.sha512",
+    "C:\\Users\\ECU\\.nuget\\packages\\fluentvalidation.aspnetcore\\10.3.6\\fluentvalidation.aspnetcore.10.3.6.nupkg.sha512",
+    "C:\\Users\\ECU\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\10.3.6\\fluentvalidation.dependencyinjectionextensions.10.3.6.nupkg.sha512",
+    "C:\\Users\\ECU\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.1.0\\microsoft.extensions.dependencyinjection.abstractions.2.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}

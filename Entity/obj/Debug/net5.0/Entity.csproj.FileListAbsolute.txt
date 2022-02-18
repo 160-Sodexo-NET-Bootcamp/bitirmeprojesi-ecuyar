@@ -1,0 +1,11 @@
+C:\Users\ECU\source\repos\MyLittleShop\Entity\bin\Debug\net5.0\Entity.deps.json
+C:\Users\ECU\source\repos\MyLittleShop\Entity\bin\Debug\net5.0\Entity.dll
+C:\Users\ECU\source\repos\MyLittleShop\Entity\bin\Debug\net5.0\ref\Entity.dll
+C:\Users\ECU\source\repos\MyLittleShop\Entity\bin\Debug\net5.0\Entity.pdb
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\Entity.AssemblyInfoInputs.cache
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\Entity.AssemblyInfo.cs
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\Entity.csproj.CoreCompileInputs.cache
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\Entity.dll
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\ref\Entity.dll
+C:\Users\ECU\source\repos\MyLittleShop\Entity\obj\Debug\net5.0\Entity.pdb
