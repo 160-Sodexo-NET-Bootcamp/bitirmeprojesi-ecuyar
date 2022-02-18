@@ -10,10 +10,10 @@ namespace Entity.Product
         public short BrandId { get; set; }
         public short ColorId { get; set; }
         public int CategoryId { get; set; }
-        public Guid SellerId { get; set; }
+        public string SellerId { get; private set; }
         public decimal Price { get; set; }
         public string PicturePath { get; set; }
-        public bool IsSold { get; set; }
+        public bool IsSold { get; private set; }
         public bool UsageStatus { get; set; }
 
         //dafeult values if they are not given

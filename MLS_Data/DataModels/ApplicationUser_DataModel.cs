@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 
-namespace Entity.User
+namespace MLS_Data.DataModels
 {
-    public class GetUserDto
+    public class ApplicationUser_DataModel : IdentityUser
     {
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
     }
 }

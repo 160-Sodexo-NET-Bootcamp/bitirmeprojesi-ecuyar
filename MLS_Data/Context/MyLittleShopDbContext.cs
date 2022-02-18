@@ -4,8 +4,8 @@ using MLS_Data.DataModels;
 
 namespace MLS_Data.Context
 {
-    public class MyLittleShopDbContext : IdentityDbContext<User_DataModel>, IMyLittleShopDbContext
-    { 
+    public class MyLittleShopDbContext : IdentityDbContext<ApplicationUser_DataModel>, IMyLittleShopDbContext
+    {
         public MyLittleShopDbContext(DbContextOptions<MyLittleShopDbContext> options) : base(options)
         {
 
@@ -14,5 +14,7 @@ namespace MLS_Data.Context
         //public DbSet<User_DataModel> Users { get; set; }
         public DbSet<Category_DataModel> Categories { get; set; }
         public DbSet<Product_DataModel> Products { get; set; }
+        public DbSet<ApplicationUser_DataModel> ApplicationUsers { get; set; }
+        public DbSet<Offer_DataModel> Offers { get; set; }
     }
 }

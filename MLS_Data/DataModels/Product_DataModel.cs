@@ -1,6 +1,4 @@
 ﻿using Entity.Shared;
-using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace MLS_Data.DataModels
 {
@@ -11,7 +9,7 @@ namespace MLS_Data.DataModels
         public short BrandId { get; set; }
         public short ColorId { get; set; }
         public int CategoryId { get; set; }
-        public Guid SellerId { get; set; }
+        public string SellerId { get; set; }
         public bool IsOfferable { get; set; }
         public bool IsSold { get; set; }
         public bool UsageStatus { get; set; }

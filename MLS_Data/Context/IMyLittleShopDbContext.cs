@@ -8,5 +8,7 @@ namespace MLS_Data.Context
         //DbSet<User_DataModel> Users { get; set; }
         DbSet<Category_DataModel> Categories { get; set; }
         DbSet<Product_DataModel> Products { get; set; }
+        DbSet<ApplicationUser_DataModel> ApplicationUsers { get; set; }
+        DbSet<Offer_DataModel> Offers { get; set; }
     }
 }

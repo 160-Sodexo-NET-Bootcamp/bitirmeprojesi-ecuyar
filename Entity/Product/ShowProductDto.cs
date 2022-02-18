@@ -8,15 +8,13 @@ namespace Entity.Product
 {
     public class ShowProductDto
     {
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
         public short BrandId { get; set; }
         public short ColorId { get; set; }
-        public string BrandName { get; set; }
-        public string ColorName { get; set; }
         public int CategoryId { get; set; }
-        public Guid SellerId { get; set; }
+        public string SellerId { get; set; }
         public bool IsOfferable { get; set; }
         public bool IsSold { get; set; }
         public bool UsageStatus { get; set; }

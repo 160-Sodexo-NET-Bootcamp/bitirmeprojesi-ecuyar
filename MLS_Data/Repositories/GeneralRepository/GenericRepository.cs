@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Entity.Shared;
+using Microsoft.EntityFrameworkCore;
 using MLS_Data.Context;
+using MLS_Data.DataModels;
 using MLS_Data.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace MLS_Data.Repositories.GeneralRepository
 {
-    public class GenericRepository<Key, MainDto, ApplicationUser> : IGenericRepository<Key, MainDto, ApplicationUser> where MainDto : class
+    public class GenericRepository<Key, MainDataModel, ApplicationUser_DataModel> : IGenericRepository<Key, MainDataModel, ApplicationUser_DataModel> where MainDataModel : class
     {
         protected MyLittleShopDbContext context;
-        internal DbSet<MainDto> dbSet;
+        internal DbSet<MainDataModel> dbSet;
 
         public GenericRepository(MyLittleShopDbContext context)
         {
             this.context = context;
-            dbSet = context.Set<MainDto>();
+            dbSet = context.Set<MainDataModel>();
         }
 
-        public virtual async Task<ApplicationResult> Add(MainDto entity, ApplicationUser applicationUser)
+        public virtual async Task<ApplicationResult> Add(MainDataModel entity, ApplicationUser_DataModel applicationUser)
         {
             try
             {
@@ -39,12 +41,12 @@ namespace MLS_Data.Repositories.GeneralRepository
                 {
                     Succeeded = false,
                     ResponseTime = DateTime.UtcNow,
-                    ErrorMessage = "Error Occured!"
+                    ErrorMessage = ErrorCodes.GeneralError
                 };
             }
         }
 
-        public virtual ApplicationResult DeleteById(MainDto entity, ApplicationUser applicationUser)
+        public virtual ApplicationResult DeleteById(MainDataModel entity, ApplicationUser_DataModel applicationUser)
         {
             try
             {
@@ -54,7 +56,7 @@ namespace MLS_Data.Repositories.GeneralRepository
                     {
                         Succeeded = false,
                         ResponseTime = DateTime.UtcNow,
-                        ErrorMessage = "Error Occured!"
+                        ErrorMessage = ErrorCodes.RecordNotFound
                     };
                 }
 
@@ -74,37 +76,97 @@ namespace MLS_Data.Repositories.GeneralRepository
                 {
                     Succeeded = false,
                     ResponseTime = DateTime.UtcNow,
-                    ErrorMessage = "Error Occured!"
+                    ErrorMessage = ErrorCodes.GeneralError
                 };
             }
         }
 
-        public virtual async Task<ApplicationResult<IEnumerable<MainDto>>> GetAll(ApplicationUser applicationUser)
+        public virtual async Task<ApplicationResult<IEnumerable<MainDataModel>>> GetAll(ApplicationUser_DataModel applicationUser)
         {
-
-            var allitems = await dbSet.ToListAsync();
-
-            return new ApplicationResult<IEnumerable<MainDto>>
+            try
             {
-                Result = allitems,
-                Succeeded = true,
-                ResponseTime = DateTime.UtcNow
-            };
+                if (applicationUser == null)
+                {
+                    return new ApplicationResult<IEnumerable<MainDataModel>>
+                    {
+                        Result = null,
+                        ResponseTime = DateTime.UtcNow,
+                        Succeeded = false,
+                        ErrorMessage = ErrorCodes.GeneralError
+                    };
+                }
+
+                var allitems = await dbSet.ToListAsync();
+
+                return new ApplicationResult<IEnumerable<MainDataModel>>
+                {
+                    Result = allitems,
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
+            }
+            catch (Exception)
+            {
+                //logger
+                return new ApplicationResult<IEnumerable<MainDataModel>>
+                {
+                    Result = null,
+                    ResponseTime = DateTime.UtcNow,
+                    Succeeded = false,
+                    ErrorMessage = ErrorCodes.GeneralError
+                };
+            }
         }
 
-        public virtual async Task<ApplicationResult<MainDto>> GetById(Key id, ApplicationUser applicationUser)
+        public virtual async Task<ApplicationResult<MainDataModel>> GetById(Key id, ApplicationUser_DataModel applicationUser)
         {
-            var item = await dbSet.FindAsync(id);
-
-            return new ApplicationResult<MainDto>
+            try
             {
-                Result = item,
-                Succeeded = true,
-                ResponseTime = DateTime.UtcNow
-            };
+                var item = await dbSet.FindAsync(id);
+
+                return new ApplicationResult<MainDataModel>
+                {
+                    Result = item,
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
+            }
+            catch (Exception)
+            {
+                return new ApplicationResult<MainDataModel>
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = ErrorCodes.GeneralError
+                };
+            }
         }
 
-        public virtual ApplicationResult Update(MainDto entity, ApplicationUser applicationUser)
+        public virtual async Task<ApplicationResult<MainDataModel>> GetByIdWithoutUser(Key id)
+        {
+            try
+            {
+                var item = await dbSet.FindAsync(id);
+
+                return new ApplicationResult<MainDataModel>
+                {
+                    Result = item,
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
+            }
+            catch (Exception)
+            {
+                return new ApplicationResult<MainDataModel>
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = ErrorCodes.GeneralError
+                };
+            }
+        }
+
+        public virtual ApplicationResult Update(MainDataModel entity, ApplicationUser_DataModel applicationUser)
         {
             try
             {
@@ -114,7 +176,7 @@ namespace MLS_Data.Repositories.GeneralRepository
                     {
                         Succeeded = false,
                         ResponseTime = DateTime.UtcNow,
-                        ErrorMessage = "Error Occured!"
+                        ErrorMessage = ErrorCodes.RecordNotFound
                     };
                 }
 
@@ -133,12 +195,12 @@ namespace MLS_Data.Repositories.GeneralRepository
                 {
                     Succeeded = false,
                     ResponseTime = DateTime.UtcNow,
-                    ErrorMessage = "Error Occured!"
+                    ErrorMessage = ErrorCodes.GeneralError
                 };
             }
         }
 
-        public virtual ApplicationResult UpdateGroup(List<MainDto> entities, ApplicationUser applicationUser)
+        public virtual ApplicationResult UpdateGroup(List<MainDataModel> entities, ApplicationUser_DataModel applicationUser)
         {
             try
             {
@@ -148,7 +210,7 @@ namespace MLS_Data.Repositories.GeneralRepository
                     {
                         Succeeded = false,
                         ResponseTime = DateTime.UtcNow,
-                        ErrorMessage = "Error Occured!"
+                        ErrorMessage = ErrorCodes.RecordNotFound
                     };
                 }
 
@@ -158,7 +220,7 @@ namespace MLS_Data.Repositories.GeneralRepository
                 {
                     Succeeded = true,
                     ResponseTime = DateTime.UtcNow,
-                    ErrorMessage = "Error Occured!"
+                    ErrorMessage = ErrorCodes.GeneralError
                 };
             }
             catch (Exception)
@@ -168,21 +230,59 @@ namespace MLS_Data.Repositories.GeneralRepository
                 {
                     Succeeded = false,
                     ResponseTime = DateTime.UtcNow,
-                    ErrorMessage = "Error Occured!"
+                    ErrorMessage = ErrorCodes.GeneralError
                 };
             }
         }
 
-        public ApplicationResult<List<MainDto>> Where(Expression<Func<MainDto, bool>> predicate, ApplicationUser applicationUser)
+        public virtual async Task<ApplicationResult<IEnumerable<MainDataModel>>> Where(Expression<Func<MainDataModel, bool>> predicate, ApplicationUser_DataModel applicationUser)
         {
-            List<MainDto> items = dbSet.Where(predicate).ToList();
-
-            return new ApplicationResult<List<MainDto>>
+            try
             {
-                Result = items,
-                Succeeded = true,
-                ResponseTime = DateTime.UtcNow
-            };
+                IEnumerable<MainDataModel> items = await dbSet.Where(predicate).ToListAsync();
+
+                return new ApplicationResult<IEnumerable<MainDataModel>>
+                {
+                    Result = items,
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
+            }
+            catch (Exception)
+            {
+                //logger
+                return new ApplicationResult<IEnumerable<MainDataModel>>
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = ErrorCodes.GeneralError
+                };
+            }
+        }
+
+        public virtual async Task<ApplicationResult<IEnumerable<MainDataModel>>> WhereWithoutUser(Expression<Func<MainDataModel, bool>> predicate)
+        {
+            try
+            {
+                IEnumerable<MainDataModel> items = await dbSet.Where(predicate).ToListAsync();
+
+                return new ApplicationResult<IEnumerable<MainDataModel>>
+                {
+                    Result = items,
+                    Succeeded = true,
+                    ResponseTime = DateTime.UtcNow
+                };
+            }
+            catch (Exception)
+            {
+                //logger
+                return new ApplicationResult<IEnumerable<MainDataModel>>
+                {
+                    Succeeded = false,
+                    ResponseTime = DateTime.UtcNow,
+                    ErrorMessage = ErrorCodes.GeneralError
+                };
+            }
         }
     }
 }

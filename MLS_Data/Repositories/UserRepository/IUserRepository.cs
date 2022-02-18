@@ -5,7 +5,7 @@ using System;
 
 namespace MLS_Data.Repositories.UserRepository
 {
-    public interface IUserRepository : IGenericRepository<Guid, User_DataModel, ApplicationUser>
+    public interface IUserRepository : IGenericRepository<Guid, User_DataModel, ApplicationUser_DataModel>
     {
     }
 }

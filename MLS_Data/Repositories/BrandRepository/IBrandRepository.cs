@@ -4,7 +4,7 @@ using MLS_Data.Repositories.GeneralRepository;
 
 namespace MLS_Data.Repositories.BrandRepository
 {
-    public interface IBrandRepository : IGenericRepository<int, Brand_DataModel, ApplicationUser>
+    public interface IBrandRepository : IGenericRepository<int, Brand_DataModel, ApplicationUser_DataModel>
     {
     }
 }

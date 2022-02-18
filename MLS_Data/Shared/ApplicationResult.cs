@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MLS_Data.Shared
+namespace Entity.Shared
 {
     public class ApplicationResult<T> : CommonApplicationResult
     {

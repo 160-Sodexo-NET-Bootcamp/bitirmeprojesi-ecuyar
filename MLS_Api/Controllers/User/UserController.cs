@@ -1,11 +1,19 @@
 ﻿using AutoMapper;
-using Core.Hash;
+using EmailService;
+using Entity.Shared;
 using Entity.User;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using MLS_Data.DataModels;
-using MLS_Data.UoW;
+using MLS_Data.Shared;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MLS_Api.Controllers.User
@@ -14,100 +22,151 @@ namespace MLS_Api.Controllers.User
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
+        //private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IConfiguration configuration;
+        public UserManager<ApplicationUser_DataModel> userManager;
+        private readonly SignInManager<ApplicationUser_DataModel> signInManager;
 
-        public UserController(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserController(UserManager<ApplicationUser_DataModel> userManager, SignInManager<ApplicationUser_DataModel> signInManager, IMapper mapper, IConfiguration configuration)
         {
-            this.unitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
             this.mapper = mapper;
+            this.configuration = configuration;
+
+            var dynamicData = new Dictionary<string, string>
+            {
+                {"firstname", "Ennes Can"},
+                {"lastname", "UYYAR" },
+                {"Weblink", "www.google.com" }
+            };
+
+            //EmailSender emailSender = new("uyar.enescan@gmail.com", dynamicData);
+            //var res = emailSender.Main();
         }
 
-        //Register user
+        /// <summary>
+        /// User Sign Up
+        /// </summary>
+        /// <param name="registerUserDto"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto userDto)
+        [Route("Register")]
+        public async Task<ApplicationResult<GetUserDto>> Register([FromBody] RegisterUserDto registerUserDto)
         {
+            //TODO : Error handling
             try
             {
-                //check email and username if it is exists
-                //if exists send and warning to user
-                var existsUser = unitOfWork.Users.Where(x => x.Username == userDto.Username || x.Email == userDto.Email);
+                //create new user and map to data model
+                var applicationUser_model = mapper.Map<ApplicationUser_DataModel>(registerUserDto);
+                applicationUser_model.EmailConfirmed = false;
+                applicationUser_model.TwoFactorEnabled = true;
 
-                //if user can not be found error
-                if (existsUser != null)
+                var result = await userManager.CreateAsync(applicationUser_model, registerUserDto.Password);
+
+                if (!result.Succeeded)
                 {
-                    return BadRequest("Username or email is in use. Try something else.");
+                    return new ApplicationResult<GetUserDto>
+                    {
+                        ErrorMessage = ErrorCodes.GeneralError,
+                        ResponseTime = DateTime.UtcNow,
+                        Succeeded = false
+                    };
                 }
 
-                //validate
-                if (!ModelState.IsValid)
+                // TODO: Add mail confirmation
+
+                var code = userManager.GenerateEmailConfirmationTokenAsync(applicationUser_model);
+
+                var link = Url.Action("confirm", "User", new { userId = applicationUser_model.Id, token = code.Result });
+
+                var dynamicData = new Dictionary<string, string>
                 {
-                    return BadRequest();
-                }
+                    {"firstname", applicationUser_model.FirstName },
+                    {"lastname", applicationUser_model.LastName },
+                    {"Weblink", link}
+                };
 
-                var newUser = userDto;
+                EmailSender emailSender = new(applicationUser_model.Email, dynamicData);
+                var res = emailSender.Main();
 
-                var hashedPassword = HashUserPassword.DoHash(userDto.UserId.ToString(), userDto.Password, userDto.Token.ToString());
-                newUser.Password = hashedPassword;
+                await signInManager.SignInAsync(applicationUser_model, false);
+                var user = await userManager.FindByIdAsync(applicationUser_model.Id);
+                var userDto = mapper.Map<GetUserDto>(user);
 
-                User_DataModel user_DataModel = mapper.Map<User_DataModel>(newUser);
 
-                //process will return true if there is no error
-                var result = await unitOfWork.Users.Add(user_DataModel);
-                unitOfWork.Complete();
 
-                return Ok();
+                return new ApplicationResult<GetUserDto>
+                {
+                    ResponseTime = DateTime.UtcNow,
+                    Succeeded = true,
+                    Result = userDto
+                };
             }
             catch (Exception)
             {
-                //logger
-                return BadRequest();
+                return new ApplicationResult<GetUserDto>
+                {
+                    ErrorMessage = ErrorCodes.GeneralError,
+                    ResponseTime = DateTime.UtcNow,
+                    Succeeded = false
+                };
             }
         }
 
-        //User login check
+        /// <summary>
+        /// User Log In
+        /// </summary>
+        /// /// <remarks>
+        /// You can use 
+        /// {
+        /// "email": "uyar.enescan@gmail.com",
+        /// "password": "enescanuyar"
+        /// }
+        /// </remarks>
+        /// <param name="logInUserDto"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("LogIn")]
-        public IActionResult CheckUserCredentials([FromBody] LogInUserDto user)
+        public async Task<IActionResult> LogIn([FromBody] LogInUserDto logInUserDto)
         {
             try
             {
-                if (!ModelState.IsValid)
+                //find corresponding user
+                var dataModel = await userManager.FindByEmailAsync(logInUserDto.Email);
+
+                //user is not exists
+                if (dataModel == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Email or password is wrong.");
                 }
 
-                //find the corresponding user
-                var existsUser = unitOfWork.Users.Where(x => x.Username == user.Username || x.Email == user.Email);
+                //try to log in
+                var result = await signInManager.PasswordSignInAsync(dataModel.UserName, logInUserDto.Password, true, true);
 
-                //if user can not be found error
-                if (existsUser == null)
+                //if user is locked
+                if (result.IsLockedOut)
                 {
-                    return BadRequest("Check user credentials.");
+                    var localTime = Convert.ToDateTime(dataModel.LockoutEnd.ToString()).ToLocalTime();
+
+                    return BadRequest($"User blocked. Please wait until {localTime}.");
                 }
 
-                //if user is blocked
-                if (existsUser[0].TryCount >= 3)
+                //if wrong password, increase failed attempt count
+                if (!result.Succeeded)
                 {
-                    return BadRequest("User blocked.");
+                    await userManager.AccessFailedAsync(dataModel);
+
+                    return BadRequest("Email or password is wrong.");
                 }
 
-                var localHashedPassword = HashUserPassword.DoHash(existsUser[0].UserId.ToString(), user.Password, existsUser[0].Token.ToString());
 
-                //check hashed passwords are matched
-                if (localHashedPassword != existsUser[0].Password)
-                {
-                    existsUser[0].TryCount++;
-                    unitOfWork.Users.Update(existsUser[0]);
-                    unitOfWork.Complete();
+                //EmailSender emailSender = new("Welcome", dataModel.Email, "Welcome to the shop!", "", $"{dataModel.FirstName} {dataModel.MiddleName} {dataModel.LastName}");
+                //emailSender.Main();
 
-                    return BadRequest();
-                }
-
-                //login successfull, reset wrong password counter
-                existsUser[0].TryCount = 0;
-
-                return Ok();
+                //log in is successfull
+                return Ok(CreateTokenResponse(dataModel));
             }
             catch (Exception)
             {
@@ -115,5 +174,71 @@ namespace MLS_Api.Controllers.User
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        [Route("confirm")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery][Required] string userId, [Required] string token)
+        {
+            try
+            {
+                //find user
+                var user = userManager.FindByIdAsync(userId).Result;
+
+                //check confirmation
+                var confirmResult = await userManager.ConfirmEmailAsync(user, token);
+
+                if (!confirmResult.Succeeded)
+                {
+                    return BadRequest("Error on confirmation.");
+                }
+
+                return Ok("Your email is confirmed.");
+            }
+            catch (Exception)
+            {
+                //logger
+                return BadRequest("Error on confirmation.");
+            }
+        }
+
+
+        private string GetToken(ApplicationUser_DataModel user)
+        {
+            var dateTimeUtc = DateTime.UtcNow;
+
+            var claims = new Claim[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, dateTimeUtc.ToString())
+            };
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("Tokens:Key")));
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+            var jwt = new JwtSecurityToken(
+                signingCredentials: signingCredentials,
+                claims: claims,
+                notBefore: dateTimeUtc,
+                expires: dateTimeUtc.AddSeconds(configuration.GetValue<int>("Tokens:Lifetime")),
+                audience: configuration.GetValue<string>("Tokens:Audience"),
+                issuer: configuration.GetValue<string>("Tokens:Issuer")
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
+        private JwtTokenResult CreateTokenResponse(ApplicationUser_DataModel user)
+        {
+            var token = GetToken(user);
+            JwtTokenResult result = new()
+            {
+                AccessToken = token,
+                UserId = user.Id
+            };
+            return result;
+        }
     }
+
+
 }
